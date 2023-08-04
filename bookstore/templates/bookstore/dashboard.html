@@ -1,0 +1,80 @@
+{% extends 'bookstore/main.html' %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+      <!-- First Card -->
+      <div class="col-md-6 mb-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Customers : {{t_customers}}</h5>
+            
+            <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">name</th>
+        <th scope="col">email</th>
+        <th scope="col">phone</th>
+        <th scope="col">age</th>
+        <th scope="col">oo</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item in customers %}
+      <tr>
+        <td>{{item.name}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.phone}}</td>
+        <td>{{item.age}}</td>
+        <td><a href="{% url 'customer' item.id %}">0o</a></td>
+      </tr>
+    {% endfor %}
+      
+    </tbody>
+  </table>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Second Card -->
+      <div class="col-md-6 mb-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Orders {{ t_orders }}</h5>
+            <a href="{% url 'create' %}">new</a>
+    <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">customer</th>
+        <th scope="col">book</th>
+        <th scope="col">tags</th>
+        <th scope="col">status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item in orders %}
+      <tr>
+        <td>{{item.id}}</td>
+        <td>{{item.customer}}</td>
+        <td>{{item.book}}</td>
+        <td>{{item.tags.name}}</td>
+        <td>{{item.status}}</td>
+      </tr>
+    {% endfor %}
+      
+    </tbody>
+  </table>
+          </div>
+        </div>
+      </div>
+
+      
+
+
+
+
+{% endblock %}

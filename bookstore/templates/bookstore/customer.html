@@ -1,0 +1,14 @@
+{% extends 'bookstore/main.html' %}
+
+
+{% block content %}
+
+<h5>Customer Area...</h5>
+
+{{ customer.name }}
+<br>
+{% for item in order %}
+<b>{{ item.book }} : {{ item.book.category }}</b> - {{ item.tags.name }} - {{ item.status }}
+{% endfor %}
+
+{% endblock %}

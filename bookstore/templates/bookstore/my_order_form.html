@@ -1,0 +1,14 @@
+{% extends 'bookstore/main.html' %}
+
+
+{% block content %}
+
+<form action="" method="POST">
+{% csrf_token %}
+{{form}}
+ 
+      <button type="submit" name="" id="" class="btn btn-sm btn-primary">Button</button>
+   
+</form>
+
+{% endblock %}
