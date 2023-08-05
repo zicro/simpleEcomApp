@@ -5,7 +5,11 @@
 
 <form action="" method="POST">
 {% csrf_token %}
-{{form}}
+
+{{ formset.management_form }}
+{% for item in formset %}
+{{ item }} <br>
+{% endfor %}
  
       <button type="submit" name="" id="" class="btn btn-sm btn-primary">Button</button>
    

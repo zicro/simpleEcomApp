@@ -4,11 +4,17 @@
 {% block content %}
 
 <h5>Customer Area...</h5>
-
+<a href="{% url 'creates' customer.id %}">new</a> 
+<br>
+<form action="" method="GET">
+        {{myFilter.form}}
+        <input type="submit" value="Search">
+    </form>
+<br>
 {{ customer.name }}
 <br>
 {% for item in order %}
-<b>{{ item.book }} : {{ item.book.category }}</b> - {{ item.tags.name }} - {{ item.status }}
+<b>{{ item.book }} : {{ item.book.category }}</b> - {{ item.tags.name }} - {{ item.status }}<br>
 {% endfor %}
 
 {% endblock %}

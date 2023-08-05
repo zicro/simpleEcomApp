@@ -37,7 +37,7 @@ class Tag(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('Pending', 'Cancelled'),
+        ('Pending', 'Pending'),
         ('Delivered', 'Delivered'),
         ('in progress', 'in progress'),
         ('Out of Order', 'Out of Order'),
