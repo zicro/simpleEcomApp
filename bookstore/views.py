@@ -8,9 +8,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .decorators import notLoggedUser, allowedUser, forAdmins
+from django.contrib.auth.models import Group
 # Create your views here.
 
 @login_required(login_url='login')
+@allowedUser(allowedGroups=['admin'])
 def home(request):
     customers = Customer.objects.all()
     t_customers = customers.count()
@@ -33,6 +36,7 @@ def books(request):
     books = Book.objects.all()
     return render(request, 'bookstore/books.html', {'books': books})
 
+@forAdmins
 def customer(request,pk):
     customer = Customer.objects.get(id=pk)
     order = customer.order_set.all()
@@ -44,8 +48,6 @@ def customer(request,pk):
                                                        'myFilter': searchFilter, 
                                                        'order': order,})
 
-def profile(request):
-    return render(request, 'bookstore/profile.html')
 
 def create(request):
     form = OrderForm()
@@ -72,6 +74,7 @@ def creates(request, pk):
     context = {'formset': formset}
     return render(request, 'bookstore/my_order_form.html', context)
 
+@allowedUser(allowedGroups=['admin'])
 def update(request, pk):
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)
@@ -83,6 +86,7 @@ def update(request, pk):
     context = {'form': form}
     return render(request, 'bookstore/my_order_form.html', context)
 
+@allowedUser(allowedGroups=['admin'])
 def delete(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == 'POST':
@@ -111,6 +115,7 @@ def userLogout(request):
     logout(request)
     return redirect('login')
 
+@notLoggedUser
 def register(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -119,9 +124,15 @@ def register(request):
     if request.method == 'POST':
         form = CreateNewUser(request.POST)
         if form.is_valid():
-            form.save()
+            gUser = form.save()
             user = form.cleaned_data.get('username')
+            group = Group.objects.get(name="moderator")
+            gUser.groups.add(group)
             messages.success(request, 'User registration successful '+user)
             return redirect('login')
     context = {'form': form}
     return render(request, 'bookstore/register.html', context)
+
+def profile(request):
+    context = {}
+    return render(request, 'bookstore/profile.html', context)

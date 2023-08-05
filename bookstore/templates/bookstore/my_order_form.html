@@ -6,6 +6,8 @@
 <form action="" method="POST">
 {% csrf_token %}
 
+{{form}}
+
 {{ formset.management_form }}
 {% for item in formset %}
 {{ item }} <br>

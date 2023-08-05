@@ -2,11 +2,14 @@
 
 <h6>----Navbar---</h6>
  current login : {{request.user}} <br>
+
+ {% if request.user.is_staff %}
  <br>
   <a href="{% url 'register' %}">register</a>
   <br>
   <a href="{% url 'login' %}">login</a>
   <br>
+  {% endif %}
   <a href="{% url 'logout' %}">logout</a>
  <br>
 
