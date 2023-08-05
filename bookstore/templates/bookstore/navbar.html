@@ -1,5 +1,13 @@
 {% load static %}
 
 <h6>----Navbar---</h6>
+ current login : {{request.user}} <br>
+ <br>
+  <a href="{% url 'register' %}">register</a>
+  <br>
+  <a href="{% url 'login' %}">login</a>
+  <br>
+  <a href="{% url 'logout' %}">logout</a>
+ <br>
 
 <img src="{% static '/images/book.png' %}" class="img-fluid rounded-top" alt="">

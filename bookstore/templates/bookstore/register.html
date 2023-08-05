@@ -1,0 +1,16 @@
+
+<h1>Create a new User Account : </h1>
+
+<form action="" method="POST">
+{% csrf_token %}
+{% comment %} {{form.as_p}} {% endcomment %}
+
+{{form.username.label}} : {{form.username}}  <br>
+{{form.email.label}} : {{form.email}} <br>
+{{form.password1.label}} : {{form.password1}} <br>
+{{form.password2.label}} : {{form.password2}} <br>
+
+{{form.errors}}
+<br>
+<button type="submit">Register</button>
+</form>
