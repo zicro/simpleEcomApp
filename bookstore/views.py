@@ -126,8 +126,8 @@ def register(request):
         if form.is_valid():
             gUser = form.save()
             user = form.cleaned_data.get('username')
-            group = Group.objects.get(name="customer")
-            gUser.groups.add(group)
+            #group = Group.objects.get(name="customer")
+            #gUser.groups.add(group)
             messages.success(request, 'User registration successful '+user)
             return redirect('login')
     context = {'form': form}
