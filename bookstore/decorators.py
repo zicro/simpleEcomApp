@@ -17,7 +17,7 @@ def allowedUser(allowedGroups=[]):
                 if group in allowedGroups:
                     return view_func(request, *args, **kwargs)
                 else:
-                    return redirect('profile')
+                    return redirect('login')
         return wrapper_func
     return decorator
 
@@ -29,5 +29,5 @@ def forAdmins(view_func):
                 if group ==  'admin':
                     return view_func(request, *args, **kwargs)
                 else:
-                    return redirect('profile')
+                    return redirect('login')
         return wrapper_func

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
-from .forms import OrderForm, CreateNewUser
+from .forms import OrderForm, CreateNewUser, CustomerForm
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
 from django.contrib.auth.forms import UserCreationForm
@@ -97,7 +97,7 @@ def delete(request, pk):
 
 def userLogin(request):
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect('/logout')
     
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -105,7 +105,7 @@ def userLogin(request):
         user = authenticate(request,username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('profile')
         else:
             messages.info(request, 'username or password not found..')
     context = {}
@@ -126,13 +126,24 @@ def register(request):
         if form.is_valid():
             gUser = form.save()
             user = form.cleaned_data.get('username')
-            group = Group.objects.get(name="moderator")
+            group = Group.objects.get(name="customer")
             gUser.groups.add(group)
             messages.success(request, 'User registration successful '+user)
             return redirect('login')
     context = {'form': form}
     return render(request, 'bookstore/register.html', context)
 
+
+@login_required(login_url='login')
+@allowedUser(allowedGroups=['customer'])
 def profile(request):
-    context = {}
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+    orders = request.user.customer.order_set.all()
+    # to update the user account profile
+    if request.method == 'POST':
+        form = CustomerForm( request.POST, request.FILES ,instance=customer)
+        if form.is_valid():
+            form.save()
+    context = {'orders':orders, 'form':form}
     return render(request, 'bookstore/profile.html', context)

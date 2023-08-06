@@ -5,4 +5,37 @@
 
 <h3>Profile Page...</h3>
 
+<form method="post" action="" enctype="multipart/form-data">
+{% csrf_token %}
+{{form.as_p}}
+
+<button type="submit">save</button>
+</form>
+
+<img src="{{request.user.customer.avatar.url}}" class="img-responsive" alt="xx" />
+
+ <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">customer</th>
+        <th scope="col">book</th>
+        <th scope="col">tags</th>
+        <th scope="col">status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item in orders %}
+      <tr>
+        <td>{{item.id}}</td>
+        <td>{{item.customer}}</td>
+        <td>{{item.book}}</td>
+        <td>{{item.tags.name}}</td>
+        <td>{{item.status}}</td>
+      </tr>
+    {% endfor %}
+      
+    </tbody>
+  </table>
+
 {% endblock %}
