@@ -10,6 +10,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .decorators import notLoggedUser, allowedUser, forAdmins
 from django.contrib.auth.models import Group
+
+import requests
+from django.conf import settings
 # Create your views here.
 
 @login_required(login_url='login')
@@ -124,12 +127,22 @@ def register(request):
     if request.method == 'POST':
         form = CreateNewUser(request.POST)
         if form.is_valid():
-            gUser = form.save()
-            user = form.cleaned_data.get('username')
-            #group = Group.objects.get(name="customer")
-            #gUser.groups.add(group)
-            messages.success(request, 'User registration successful '+user)
-            return redirect('login')
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            data = {
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+            result = r.json()
+            if result['success']:
+                gUser = form.save()
+                user = form.cleaned_data.get('username')
+                #group = Group.objects.get(name="customer")
+                #gUser.groups.add(group)
+                messages.success(request, 'User registration successful '+user)
+                return redirect('login')
+            else:
+                messages.error(request, 'User registration failed')
     context = {'form': form}
     return render(request, 'bookstore/register.html', context)
 

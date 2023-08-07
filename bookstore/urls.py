@@ -1,6 +1,9 @@
 from django.urls import path
 
 from bookstore import views
+from django.contrib.auth import views as authViews
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 urlpatterns = [
     path('', views.home, name="home"),
@@ -15,5 +18,11 @@ urlpatterns = [
     path('login/', views.userLogin, name="login"),
     path('logout/', views.userLogout, name="logout"),
     path('register/', views.register, name="register"),
+
+
+    path('reset_password/', authViews.PasswordResetView.as_view(), name="reset_password"),
+    path('reset_password_sent/', authViews.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', authViews.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('reset_password_complete/', authViews.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
 
 ]
